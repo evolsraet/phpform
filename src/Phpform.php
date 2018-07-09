@@ -1,6 +1,6 @@
 <?php
 
-namespace evolsraet\Phpform;
+namespace Phpform;
 
 class Phpform {
 	public function test() {
