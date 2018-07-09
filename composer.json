@@ -1,0 +1,17 @@
+{
+    "name": "evolsraet/phpForm",
+    "description": "PHP form generator / test version",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Evolsraet",
+            "email": "ks1995@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+            "evolsraet\\Phpform\\" : "src"
+         }
+    },
+    "require": {}
+}
