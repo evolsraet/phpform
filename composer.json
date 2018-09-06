@@ -9,13 +9,14 @@
             "email": "ks1995@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4" : {
             "Phpform\\" : "src/"
          }
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.4.0"
     }
 }
 
