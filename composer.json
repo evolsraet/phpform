@@ -2,13 +2,13 @@
     "name": "evolsraet/phpform",
     "description": "PHP form generator / test version",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Evolsraet",
             "email": "ks1995@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
     "autoload": {
         "psr-4" : {
             "Phpform\\" : "src/"
