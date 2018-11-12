@@ -42,8 +42,10 @@ class Phpform {
     	 * AJAX 사용 팁
     	 *
     	 * $attr
-    	 * 	ajax_after, ajax_before 전달 (성공,실행전 변수)
-    	 *  ajaxType 입력 (기본 값 json)
+    	 * 	ajax_after, ajax_before 전달 (성공,실행전 함수명)
+    	 *  ajaxType (기본 값 json)
+         *  multipart (멀티파트) true / false
+         *  method : get / post
     	 *
     	 */
 
