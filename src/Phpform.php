@@ -20,9 +20,6 @@ class Phpform {
 
     public function __construct( array $config = array() ) {
         empty($config) OR $this->init($config);
-
-        // $this->CI =& get_instance();
-        // $this->CI->load->helper('form');
     }
 
     public function init( array $config = array() ) {
