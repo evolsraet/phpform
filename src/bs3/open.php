@@ -1,4 +1,4 @@
-<form id="<?=$id?>"
+<form id="<?=$id?>" name="<?=$id?>"
 	action="<?=$action?>"
 	<? if( $attr['multipart'] ) : ?>
 	enctype="multipart/form-data"
@@ -10,7 +10,7 @@
 
 	<?
 		// 코드이그나이터 CSRF코드
-		if( CI_VERSION > 3 ) :
+		if( CI_VERSION > 3 && $attr['method']!='get') :
             $CI =& get_instance();
             if( $CI->config->item('csrf_protection') ) :
         	?>

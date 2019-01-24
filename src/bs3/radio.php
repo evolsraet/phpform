@@ -12,7 +12,7 @@
 			id="<?="{$id}_{$set_key}"?>"
 		    value="<?=$set_key?>"
 		    placeholder="<?=$attr['placeholder']?>"
-		    <? if( $set_key == $value ) : ?>
+		    <? if( $value != '' && $set_key == $value ) : ?>
 		    checked
 		    <? endif; ?>
 		    <?=$this->special_attr($attr)?>

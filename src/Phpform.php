@@ -11,6 +11,7 @@ class Phpform {
     private $class_form_group = 'form-group ';
     private $class_form_control = 'form-control ';
     private $class_button = 'btn ';
+    private $view_mode = false;
 
     private $is_ajax = FALSE;
     private $ajax_after = FALSE;
@@ -27,7 +28,7 @@ class Phpform {
     public function init( array $config = array() ) {
         foreach ($config as $key => $row) {
             // 같은 키 값이 있으면
-            if ( iseet( $this->{$key} ) ) :
+            if ( isset( $this->{$key} ) ) :
                 $this->{$key} = $row;
             endif;
         }
@@ -42,10 +43,8 @@ class Phpform {
     	 * AJAX 사용 팁
     	 *
     	 * $attr
-    	 * 	ajax_after, ajax_before 전달 (성공,실행전 함수명)
-    	 *  ajaxType (기본 값 json)
-         *  multipart (멀티파트) true / false
-         *  method : get / post
+    	 * 	ajax_after, ajax_before 전달 (성공,실행전 변수)
+    	 *  ajaxType 입력 (기본 값 json)
     	 *
     	 */
 
@@ -86,6 +85,8 @@ class Phpform {
 
 	    public function input($label,$type,$id,$value,$attr=array(),$wrapping=TRUE) {
             if( $type=='hidden' )   $wrapping = false;
+
+            if( !$attr['placeholder'] ) $attr['placeholder'] = $label;
 
 	        $attr['class'] = $this->class_form_control . $attr['class'];
 	        $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;
@@ -145,7 +146,32 @@ class Phpform {
         	$this->out('radio', $data);
 	    }
 
+        public function select($label,$set=array(),$id,$value,$attr=array(),$wrapping=TRUE) {
+            if( !is_array($set) || !count($set) ) return false;
+
+            $attr['class'] = $this->class_form_control . $attr['class'];
+            $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;
+
+            // for wrapping
+            $attr['without_label'] = isset($attr['without_label']) ? $attr['without_label'] : FALSE;
+
+            $attr['inline'] = isset($attr['inline']) ? $attr['inline'] : TRUE;
+
+            $data = compact('label', 'id', 'value', 'attr');
+
+            if( $wrapping ) :
+                $wrapper_header = $this->wrapper_header($data, TRUE);
+                $wrapper_footer = $this->wrapper_footer($data, TRUE);
+            endif;
+
+            unset($attr['without_label']);
+            $data = compact('label', 'set', 'id', 'value', 'attr', 'wrapper_header', 'wrapper_footer');
+            $this->out('select', $data);
+        }
+
 	    public function textarea($label,$row,$id,$value,$attr=array(),$wrapping=TRUE) {
+            if( !$attr['placeholder'] ) $attr['placeholder'] = $label;
+
 	        $attr['class'] = $this->class_form_control . $attr['class'];
 	        $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;
 
@@ -170,10 +196,34 @@ class Phpform {
 
     /*----------  래핑  ----------*/
     	public function out($file, $data = array()) {
-            ob_start();
-            extract((array)$data);
-            include __DIR__."/{$this->provider}/{$file}.php";
-            echo ob_get_clean();
+            $non_view_mode_method = array(
+                'open', 'close', 'button'
+            );
+
+            if( $this->view_mode ) :
+                if( !in_array($file, $non_view_mode_method) ) :
+                    if( $data['type']=='hidden' ) return false;
+
+                    if( $file == 'radio' || $file == 'select' )
+                        $value = $data['set'][ $data['value'] ];
+                    else
+                        $value = $data['value'];
+
+                    echo $data['wrapper_header'];
+                    echo $value;
+                    echo $data['wrapper_footer'];
+                elseif( $file == 'open' ) :
+                    // kmh_print( $data );
+                    echo "<div class=\"form_open {$data['attr']['class']}\">";
+                elseif( $file == 'close' ) :
+                    echo "</div> <!-- form_close -->";
+                endif;
+            else :
+                ob_start();
+                extract((array)$data);
+                include __DIR__."/{$this->provider}/{$file}.php";
+                echo ob_get_clean();
+            endif;
     	}
 
         public function wrapper_header( $data, $return = false ) {
