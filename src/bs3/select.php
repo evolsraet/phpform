@@ -14,13 +14,23 @@
 	placeholder="<?=$attr['placeholder']?>"
 	>
 	<? foreach( $set as $set_key => $set_row ) : ?>
-		<option value="<?=$set_key?>"
-		    <? if( $set_key == $value ) : ?>
-		    selected
-		    <? endif; ?>
-			>
-			<?=$set_row?>
-		</option>
+		<? if( is_array($set_row) || is_object($set_row) ) : ?>
+			<option value="<?=$set_row->id?>"
+			    <? if( $set_row->id == $value ) : ?>
+			    selected
+			    <? endif; ?>
+				>
+				<?=$set_row->text?>
+			</option>					
+		<? else : ?>
+			<option value="<?=$set_key?>"
+			    <? if( $set_key == $value ) : ?>
+			    selected
+			    <? endif; ?>
+				>
+				<?=$set_row?>
+			</option>
+		<? endif; ?>
 	<? endforeach; ?>
 </select>
 
