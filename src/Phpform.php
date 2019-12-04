@@ -6,17 +6,19 @@ class Phpform {
 	private $provider = "bs3";
 	private $form_id = "";
     private $class_form = ' ';
-    private $class_horizon_label = 'col-sm-12 col-md-2 control-label text-left';
-    private $class_horizon_form_control = 'col-sm-12 col-md-10 ';
-    private $class_form_group = 'form-group ';
-    private $class_form_control = 'form-control ';
+
+    public $class_horizon_label = 'col-sm-12 col-md-2 control-label text-left';
+    public $class_horizon_form_control = 'col-sm-12 col-md-10 ';
+    public $class_form_group = 'form-group ';
+    public $class_form_control = 'form-control ';
+
     private $class_button = 'btn ';
     private $view_mode = false;
 
     private $is_ajax = FALSE;
     private $ajax_after = FALSE;
     private $ajax_before = FALSE;
-    private $is_horizontal = FALSE;
+    public $is_horizontal = FALSE;
 
     public function __construct( array $config = array() ) {
         empty($config) OR $this->init($config);
@@ -45,6 +47,23 @@ class Phpform {
     	 *
     	 */
 
+        private function check_value($selected, $value) {
+            // ifelse
+            if( is_array($value) ) :
+                if( in_array($selected, $value) ) :
+                    return true;
+                else :
+                    return false;
+                endif;
+            else :
+                if( $selected == $value ) :
+                    return true;
+                else :
+                    return false;                
+                endif;
+            endif;
+            // End of ifelse
+        }
 
         public function open( $id, $action="", $attr=array() ) {
         	$this->form_id = $id;
@@ -83,7 +102,7 @@ class Phpform {
 	    public function input($label,$type,$id,$value,$attr=array(),$wrapping=TRUE) {
             if( $type=='hidden' )   $wrapping = false;
 
-            if( !$attr['placeholder'] ) $attr['placeholder'] = $label;
+            if( !isset($attr['placeholder']) ) $attr['placeholder'] = $label;
 
 	        $attr['class'] = $this->class_form_control . $attr['class'];
 	        $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;
@@ -144,7 +163,7 @@ class Phpform {
 	    }
 
         public function select($label,$set=array(),$id,$value,$attr=array(),$wrapping=TRUE) {
-            if( !is_array($set) || !count($set) ) return false;
+            if( !is_array($set) ) return false;
 
             $attr['class'] = $this->class_form_control . $attr['class'];
             $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;
@@ -167,7 +186,7 @@ class Phpform {
         }
 
 	    public function textarea($label,$row,$id,$value,$attr=array(),$wrapping=TRUE) {
-            if( !$attr['placeholder'] ) $attr['placeholder'] = $label;
+            if( !isset($attr['placeholder']) ) $attr['placeholder'] = $label;
 
 	        $attr['class'] = $this->class_form_control . $attr['class'];
 	        $attr['name'] = isset($attr['name']) ? $attr['name'] : $id;

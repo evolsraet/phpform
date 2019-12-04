@@ -9,4 +9,12 @@
     <?=$this->special_attr($attr)?>
 	><?=$value?></textarea>
 
+<!-- help -->
+<? if( $attr['help'] ) : ?>
+	<p class="help-block">
+		<?=$attr['help']?>
+	</p>
+<? endif; ?>
+<!-- End Of help -->
+
 <?=$wrapper_footer?>

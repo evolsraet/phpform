@@ -1,6 +1,8 @@
 <?=$wrapper_header?>
 
+<? if( !$attr['inline'] ) : ?>
 <div class="checkbox">
+<? endif; ?>
 	<label class="<?=$attr['inline']?"checkbox-inline":""?>">
 		<input type="checkbox"
 		    id="<?=$id?>"
@@ -18,7 +20,16 @@
 
 		<?=$label?>
 	</label>
-
+<? if( !$attr['inline'] ) : ?>
 </div>
+<? endif; ?>
+
+<!-- help -->
+<? if( $attr['help'] ) : ?>
+	<p class="help-block">
+		<?=$attr['help']?>
+	</p>
+<? endif; ?>
+<!-- End Of help -->
 
 <?=$wrapper_footer?>

@@ -22,19 +22,21 @@
 
 			// dateType = $("#<?=$this->form_id?>").attr('method') ? $("#<?=$this->form_id?>").attr('method') : 'json';
 
+			$(btn).button('loading');
+			<? if( $this->ajax_before ) : ?>
+				beforeSubmit = <?=$this->ajax_before?>(btn);
+			<? endif; ?>
+
+			if( beforeSubmit == false ) {
+				$(btn).button('reset');
+				return false;
+			}
+
 			// jquery form plugin 사용
 			$(form).ajaxSubmit({
 	            beforeSubmit: function (data,form,option) {
 					// alert('beforeSubmit');
-					$(btn).button('loading');
-					<? if( $this->ajax_before ) : ?>
-						beforeSubmit = <?=$this->ajax_before?>(btn);
-					<? endif; ?>
 
-					if( beforeSubmit == false ) {
-						$(btn).button('reset');
-						return false;
-					}
 					// return false;
 	                //막기위해서는 return false를 잡아주면됨
 	                // return true;
@@ -55,10 +57,12 @@
 	            error: function( response ){
 					// alert('error');
 					alert('AJAX 통신 중 에러가 발생했습니다.\n새로고침 후 시도해보세요.');
-					<? if( ENVIRONMENT == 'development' ) : ?>
+					<? if( 0 && ENVIRONMENT == 'development' ) : ?>
 						$(form).html(response.responseText + "개발모드 전용");
 					<? endif; ?>
 					console.log( response.responseText );
+					
+					$(btn).button('reset');
 	            }
 			});
 	}
