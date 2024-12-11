@@ -8,11 +8,11 @@
 
 <select
     name="<?=$id?><?=$is_multiple?"[]":""?>"
-	id="<?=$id?>"
+	id="<?=str_replace("[]","",$id)?>"
+	<?=$this->special_attr($attr)?>
     <? foreach ($attr as $key => $row) : ?>
         <?=$key?>="<?=$row?>"
     <? endforeach; ?>
-	<?=$this->special_attr($attr)?>
 	placeholder="<?=$attr['placeholder']?>"
 	>
 	<? foreach( (array) $set as $set_key => $set_row ) : ?>

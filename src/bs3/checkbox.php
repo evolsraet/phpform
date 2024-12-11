@@ -12,11 +12,15 @@
 		    <? endif; ?>
 		    value="<?=$value?>"
 		    placeholder="<?=$attr['placeholder']?>"
+		    <?= ($attr['readonly']) ? 'onclick="return false;"' : "" ?>
 		    <?=$this->special_attr($attr)?>
 		    <? foreach ($attr as $key => $row) : ?>
 		        <?=$key?>="<?=$row?>"
 		    <? endforeach; ?>
 			>
+
+			<input type="hidden" name="_checkbox_<?=$attr['name']?>"
+				>
 
 		<?=$label?>
 	</label>

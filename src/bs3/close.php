@@ -13,7 +13,6 @@
 	});
 
 	function <?=$this->form_id?>_submit() {
-			// alert('1');
 
 			// 폼 필수 요소 확인
 			var form = $("#<?=$this->form_id?>");
@@ -35,9 +34,43 @@
 			// jquery form plugin 사용
 			$(form).ajaxSubmit({
 	            beforeSubmit: function (data,form,option) {
+	            	beforeSubmit_result = true;
+	            	
+	            	// 빈 멀티셀렉트 빈값 넣어주기 (isset 으로 검출)
+	            	$(form).find('select').each(function(index, el) {
+			            if ( !$(el).val() && $(el).attr('name') ) {
+			                data.push({
+			                    name: $(el).attr('name'),
+			                    value: null
+			                });
+			            }
+			        });
+
+	            	if( typeof phpform_beforeSubmit == 'function' ) {
+	            		console.log('beforeSubmit is run. phpform / close');
+						beforeSubmit_result = phpform_beforeSubmit(data,form,option);
+	            	}
+
+	            	if( !beforeSubmit_result )
+	            		return false;
+
 					// alert('beforeSubmit');
 
-					// return false;
+	            	// console.log('data',data);
+	            	// console.log('form',form);
+	            	// console.log('option',option);
+
+	            	// // $(form + " checkbox").not(':checked')
+	            	// data.push(
+		            // 	{
+		            // 		name: 'customer_test',
+		            // 		value: 'gahaaha',
+		            // 		type: 'aaa',
+		            // 		required: false,
+		            // 	}
+	            	// );
+					// // {name: 'customer_option[]', value: 'Y', type: 'checkbox', required: false}
+					// $(btn).button('reset');
 	                //막기위해서는 return false를 잡아주면됨
 	                // return true;
 	            },
@@ -50,9 +83,11 @@
 						<? if( $this->ajax_after ) : ?>
 							<?=$this->ajax_after?>(response, btn);
 						<? endif; ?>
-					}
 
+					}
+					
 					// $(btn).button('reset');
+
 	            },
 	            error: function( response ){
 					// alert('error');
