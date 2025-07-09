@@ -5,7 +5,7 @@
 	?>
 
 		<label  for="<?=$id?$id:""?>"
-	            class="control-label <?=$this->is_horizontal ? $this->class_horizon_label : ""?>"
+	            class="control-label <?=$attr['label_class']?> <?=$this->is_horizontal ? $this->class_horizon_label : ""?>"
 			>
 			<? if( $attr['required'] && !$this->view_mode ) : ?>
 				<span class="text-danger">* </span>

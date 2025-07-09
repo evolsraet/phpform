@@ -8,7 +8,7 @@
 
 <select
     name="<?=$id?><?=$is_multiple?"[]":""?>"
-	id="<?=$id?>"
+	id="<?=str_replace("[]","",$id)?>"
     <? foreach ($attr as $key => $row) : ?>
         <?=$key?>="<?=$row?>"
     <? endforeach; ?>
@@ -48,3 +48,4 @@
 <!-- End Of help -->
 
 <?=$wrapper_footer?>
+

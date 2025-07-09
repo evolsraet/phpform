@@ -270,12 +270,20 @@ class Phpform {
 
             $result = '';
 
+            // var_dump($attr . PHP_EOL);
+
             foreach ($attr_list as $key => $row) {
-            	if( array_key_exists($key, $attr) )	$result .= $attr_list[$key];
+                // var_dump("- {$key} = {$attr[$key]}" . PHP_EOL);
+            	if( array_key_exists($key, $attr) && $attr[$key] )	{
+                    // echo "속성={$key}";
+                    var_dump('yes' . PHP_EOL);
+                    $result .= $attr_list[$key];
+                }
             	unset( $attr[$key] );
             }
 
             echo $result;
+            // die();
         }
 }
 
