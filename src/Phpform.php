@@ -13,7 +13,7 @@ class Phpform {
     public $class_form_control = 'form-control ';
 
     private $class_button = 'btn ';
-    private $view_mode = false;
+    public $view_mode = false;
 
     private $is_ajax = FALSE;
     private $ajax_after = FALSE;
@@ -216,24 +216,42 @@ class Phpform {
                 'open', 'close', 'button'
             );
 
-            if( $this->view_mode ) :
-                if( !in_array($file, $non_view_mode_method) ) :
-                    if( $data['type']=='hidden' ) return false;
+            // readonly 가 아닌 disabled 로 처리할 요소들
+            $readonly_method = array(
+                'radio', 'checkbox'
+            );
 
-                    if( $file == 'radio' || $file == 'select' )
-                        $value = $data['set'][ $data['value'] ];
-                    else
-                        $value = $data['value'];
+            if( $this->view_mode && !in_array($file, $non_view_mode_method) ) :
+                // if( !in_array($file, $non_view_mode_method) ) :
+                //     // if( $data['type']=='hidden' ) return false;
 
-                    echo $data['wrapper_header'];
-                    echo $value;
-                    echo $data['wrapper_footer'];
-                elseif( $file == 'open' ) :
-                    // kmh_print( $data );
-                    echo "<div class=\"form_open {$data['attr']['class']}\">";
-                elseif( $file == 'close' ) :
-                    echo "</div> <!-- form_close -->";
-                endif;
+                //     // if( $file == 'radio' || $file == 'select' )
+                //     //     $value = $data['set'][ $data['value'] ];
+                //     // else
+                //     //     $value = $data['value'];
+
+                //     // echo $data['wrapper_header'];
+                //     // echo $value;
+                //     // echo $data['wrapper_footer'];
+                    
+                    // $data['attr']['disabled'] = true;
+                    if( in_array($file, (array) $readonly_method) ) :
+                        // $data['attr']['disabled'] = true;
+                        $data['attr']['readonly'] = true;
+                    else :
+                        // $data['attr']['readonly'] = true;
+                        $data['attr']['disabled'] = true;
+                    endif;
+                    
+                    ob_start();
+                    extract((array)$data);
+                    include __DIR__."/{$this->provider}/{$file}.php";
+                    echo ob_get_clean();                    
+                // elseif( $file == 'open' ) :
+                //     echo "<div class=\"form_open {$data['attr']['class']}\">";
+                // elseif( $file == 'close' ) :
+                //     echo "</div> <!-- form_close -->";
+                // endif;
             else :
                 ob_start();
                 extract((array)$data);
@@ -262,28 +280,28 @@ class Phpform {
             	echo ob_get_clean();
         }
 
-        public function special_attr( &$attr ) {
+        public function special_attr( &$attr, $return_array = false ) {
             $attr_list = array();
             $attr_list['required'] = ' required ';
             $attr_list['disabled'] = ' disabled ';
             $attr_list['readonly'] = ' readonly="readonly" ';
 
             $result = '';
-
-            // var_dump($attr . PHP_EOL);
+            $result_array = [];
 
             foreach ($attr_list as $key => $row) {
-                // var_dump("- {$key} = {$attr[$key]}" . PHP_EOL);
-            	if( array_key_exists($key, $attr) && $attr[$key] )	{
-                    // echo "속성={$key}";
-                    var_dump('yes' . PHP_EOL);
+                // kmh_print($attr[$key]);
+                if( array_key_exists($key, $attr) && $attr[$key] ) :
+                    $result_array[$key] = $attr_list[$key];
                     $result .= $attr_list[$key];
-                }
-            	unset( $attr[$key] );
+                endif;
+                unset( $attr[$key] );
             }
 
-            echo $result;
-            // die();
+            if( $return_array )
+                return $result_array;
+            else
+                echo $result;
         }
 }
 
